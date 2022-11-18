@@ -1,6 +1,7 @@
 import 'package:clinical_system/blocs/blocs.dart';
 import 'package:clinical_system/debugApp.dart';
 import 'package:clinical_system/libraries/components/loagindIndicator.dart';
+import 'package:clinical_system/models/usuario/usuario.dart';
 import 'package:clinical_system/screens/home/home.dart';
 
 import 'package:clinical_system/screens/login/login.dart';
@@ -17,11 +18,11 @@ class RegisterPage extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) {
-            return LoginBloc();
+            return UsersBloc();
           },
         )
       ],
-      child:  Register(),
+      child: Register(),
     );
   }
 }
@@ -35,55 +36,50 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final identityNumber = TextEditingController();
+  final firstName = TextEditingController();
+  final secondName = TextEditingController();
+  final firstLastName = TextEditingController();
+  final secondLastName = TextEditingController();
+  final eMail = TextEditingController();
+  final cellPhone = TextEditingController();
+  final phone = TextEditingController();
+  final password = TextEditingController();
   bool isLoading = false;
 
   ///*************** initState ***************
   @override
   void initState() {
-
     super.initState();
   }
 
   ///*************** dispose ***************
   @override
   void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginBloc, LoginState>(
+    return BlocListener<UsersBloc, UsersState>(
       listener: (context, state) {
-        if (state is LoginInitialState) {}
+        if (state is UsersInitialState) {}
         if (state is RegisterLoadingState) {
           setState(() {
             isLoading = true;
           });
         }
-        if (state is RegisterReceivedDataState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: const Text("Paciente registrado"),
-              action: SnackBarAction(label: "Entiendo", onPressed: () {}),
-            ),
-          );
-        }
+
         if (state is RegisterSuccessState) {
           setState(() {
             isLoading = false;
           });
 
-          Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
         }
-        if (state is LoginFailureState) {
+        if (state is UserFailureState) {
           setState(() {
             isLoading = false;
-            emailController.clear();
-            passwordController.clear();
           });
 
           ScaffoldMessenger.of(context).showSnackBar(
@@ -94,7 +90,7 @@ class _RegisterState extends State<Register> {
           );
         }
       },
-      child: BlocBuilder<LoginBloc, LoginState>(
+      child: BlocBuilder<UsersBloc, UsersState>(
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
@@ -102,65 +98,185 @@ class _RegisterState extends State<Register> {
             ),
             body: Stack(
               children: [
-                Center(
-                  child: Row(
-                    children: [
-                      Expanded(child: Container()),
-                      Expanded(
-                        flex: 3,
-                        child: SingleChildScrollView(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Form(
-                              key: _formKey,
-                              child: Column(
-                                children: [
-                                  Text("Iniciar seccion", style: Theme.of(context).textTheme.headline3),
-                                  const SizedBox(height: 32),
-                                  TextFormField(
-                                    controller: emailController,
-                                    decoration: const InputDecoration(
-                                      labelText: "Email",
-                                      hintText: "Ingresa Email.",
-                                      border: OutlineInputBorder(),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 32),
-                                  TextFormField(
-                                    controller: passwordController,
-                                    decoration: const InputDecoration(
-                                      labelText: "Password",
-                                      hintText: "Ingresa Password.",
-                                      border: OutlineInputBorder(),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 32),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: ElevatedButton(
-                                      onPressed: isLoading ? null : () {},
-                                      child: const Text("Iniciar seccion"),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.push(context,
-                                            MaterialPageRoute(builder: (context) => const DebugApp()));
-                                      },
-                                      child: const Text("Debug"),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(64.0),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          Text("Registro de pacientes", style: Theme.of(context).textTheme.headline2),
+                          const SizedBox(height: 32),
+                          TextFormField(
+                            controller: identityNumber,
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              labelText: "Numero Identidad",
+                              hintText: "Ingresa Numero Identidad",
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter Numero Identidad';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 32),
+                          TextFormField(
+                            controller: firstName,
+                            keyboardType: TextInputType.name,
+                            decoration: const InputDecoration(
+                              labelText: "Primer Nombre",
+                              hintText: "Ingresa Primer Nombre",
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter Primer Nombre';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 32),
+                          TextFormField(
+                            controller: secondName,
+                            keyboardType: TextInputType.name,
+                            decoration: const InputDecoration(
+                              labelText: "Segundo Nombre",
+                              hintText: "Ingresa Segundo Nombre",
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter Segundo Nombre';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 32),
+                          TextFormField(
+                            controller: firstLastName,
+                            keyboardType: TextInputType.name,
+                            decoration: const InputDecoration(
+                              labelText: "Primer Apellido",
+                              hintText: "Ingresa Primer Apellido",
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter Primer Apellido';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 32),
+                          TextFormField(
+                            controller: secondLastName,
+                            keyboardType: TextInputType.name,
+                            decoration: const InputDecoration(
+                              labelText: "Segundo Apellido",
+                              hintText: "Ingresa Segundo Apellido",
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter Segundo Apellido';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 32),
+                          TextFormField(
+                            controller: eMail,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: const InputDecoration(
+                              labelText: "Correo",
+                              hintText: "Ingresa correo",
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter Correo';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 32),
+                          TextFormField(
+                            controller: cellPhone,
+                            keyboardType: TextInputType.phone,
+                            decoration: const InputDecoration(
+                              labelText: "Numero de celular",
+                              hintText: "Ingresa Numero de celular",
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter Numero de celular';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 32),
+                          TextFormField(
+                            controller: phone,
+                            keyboardType: TextInputType.phone,
+                            decoration: const InputDecoration(
+                              labelText: "Numero de Telefonico",
+                              hintText: "Ingresa Numero de Telefonico",
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter Numero de Telefonico';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 32),
+                          TextFormField(
+                            controller: password,
+                            decoration: const InputDecoration(
+                              labelText: "Contraseña",
+                              hintText: "Ingresa Contraseña",
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter Contraseña';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 32),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: isLoading
+                                  ? null
+                                  : () {
+                                      if (_formKey.currentState!.validate()) {
+                                        BlocProvider.of<UsersBloc>(context).add(RegisterEvent(
+                                            user: UsuarioRegister(
+                                                numeroIdentidad: identityNumber.text,
+                                                primerNombre: firstName.text,
+                                                segundoNombre: firstLastName.text,
+                                                primerApellido: firstLastName.text,
+                                                segundoApellido: secondLastName.text,
+                                                correo: eMail.text,
+                                                celCliente: cellPhone.text,
+                                                telefono: phone.text,
+                                                contrasena: password.text)));
+                                      }
+                                    },
+                              child: const Text("Registrarme"),
                             ),
                           ),
-                        ),
+                          const SizedBox(height: 16),
+                        ],
                       ),
-                      Expanded(child: Container()),
-                    ],
+                    ),
                   ),
                 ),
                 if (isLoading) LoadingIndicator(color: Theme.of(context).primaryColor)

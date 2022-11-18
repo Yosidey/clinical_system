@@ -1,11 +1,12 @@
+import 'package:clinical_system/models/usuario/usuario.dart';
 import 'package:equatable/equatable.dart';
 
 ///***************************************************************************
 /// LoginEvent Implementation
 ///***************************************************************************
-abstract class LoginEvent extends Equatable {
+abstract class UsersEvent extends Equatable {
   /// Equatable works only with Final attributes and Const methods
-  const LoginEvent();
+  const UsersEvent();
 
   List<Object> get props => [];
 }
@@ -13,15 +14,29 @@ abstract class LoginEvent extends Equatable {
 /// **************************************************************************
 ///  Implementation LoginInEvent
 /// **************************************************************************
-class LoginInEvent extends LoginEvent {
-  final String email;
-  final String password;
+class LoginInEvent extends UsersEvent {
+final UsuarioLogin user;
 
-  const LoginInEvent({required this.email, required this.password});
-
-  @override
-  List<Object> get props => [email, password];
+  const LoginInEvent({required this.user});
 
   @override
-  String toString() => "LoginInEvent { email: $email, password: $password }";
+  List<Object> get props => [user, ];
+
+  @override
+  String toString() => "LoginInEvent { user: $user}";
+}
+
+/// **************************************************************************
+///  Implementation RegisterEvent
+/// **************************************************************************
+class RegisterEvent extends UsersEvent {
+  final UsuarioRegister user;
+
+  const RegisterEvent({required this.user});
+
+  @override
+  List<Object> get props => [user, ];
+
+  @override
+  String toString() => "LoginInEvent { user: $user, }";
 }

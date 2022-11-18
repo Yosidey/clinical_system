@@ -17,23 +17,63 @@ class UsuarioLogin {
   Map<String, dynamic> toJson() => _$UsuarioLoginToJson(this);
 }
 
-class UsuarioData {
+class UsuarioRegister {
+  final String numeroIdentidad;
+  final String primerNombre;
+  final String segundoNombre;
+  final String primerApellido;
+  final String segundoApellido;
+  final String correo;
+  final String celCliente;
+  final String telefono;
+  final String contrasena;
+
+  UsuarioRegister({
+    required this.numeroIdentidad,
+    required this.primerNombre,
+    required this.segundoNombre,
+    required this.primerApellido,
+    required this.segundoApellido,
+    required this.celCliente,
+    required this.correo,
+    required this.telefono,
+    required this.contrasena,
+  });
+
+  factory UsuarioRegister.fromJson(Map<String, dynamic> json) => _$UsuarioRegisterFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UsuarioRegisterToJson(this);
+}
+
+class UsuarioRegisterData {
+  final String response;
+  final int msg;
+  final int user_id;
+
+  UsuarioRegisterData({required this.response, required this.msg, required this.user_id});
+
+  factory UsuarioRegisterData.fromJson(Map<String, dynamic> json) => _$UsuarioRegisterDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UsuarioRegisterDataToJson(this);
+}
+class UsuarioLoginData {
   final int exito;
   final String mensaje;
   final LoginData data;
 
-  UsuarioData({required this.exito, required this.mensaje, required this.data});
+  UsuarioLoginData({required this.exito, required this.mensaje, required this.data});
 
-  factory UsuarioData.fromJson(Map<String, dynamic> json) => _$UsuarioDataFromJson(json);
+  factory UsuarioLoginData.fromJson(Map<String, dynamic> json) => _$UsuarioLoginDataFromJson(json);
 
-  Map<String, dynamic> toJson() => _$UsuarioDataToJson(this);
+  Map<String, dynamic> toJson() => _$UsuarioLoginDataToJson(this);
 }
 
 class LoginData {
+  final int id;
   final String email;
   final String token;
 
-  LoginData({required this.email, required this.token});
+  LoginData({required this.id,required this.email, required this.token});
 
   factory LoginData.fromJson(Map<String, dynamic> json) => _$LoginDataFromJson(json);
 
@@ -43,13 +83,13 @@ class LoginData {
 class Usuario {
   Usuario();
 
-  static UsuarioData user = UsuarioData(exito: 0, mensaje: "", data: LoginData(email: "", token: ""));
+  static UsuarioLoginData user = UsuarioLoginData(exito: 0, mensaje: "", data: LoginData(id: 1,email: "", token: ""));
 
-  UsuarioData getCash() {
+  UsuarioLoginData getUser() {
     return user;
   }
 
-  setUser(UsuarioData userData) {
+  setUser({required UsuarioLoginData userData}) {
     user = userData;
   }
 }

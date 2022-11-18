@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:clinical_system/screens/citas/citas.dart';
-import 'package:clinical_system/services/request/cita/request_cita.dart';
+import 'package:clinical_system/services/request/cita/request_citas.dart';
 
 class CitasBloc extends Bloc<CitasEvent, CitasState> {
   @override

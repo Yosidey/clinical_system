@@ -1,5 +1,6 @@
-import 'package:clinical_system/screens/login/login.dart';
 import 'package:flutter/material.dart';
+import 'package:clinical_system/screens/welcome/welcome_screen.dart';
+
 
 void main() => runApp(const HomeApp());
 
@@ -10,8 +11,8 @@ class HomeApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: "HomeApp",
-      home: LoginPage(),
+      debugShowCheckedModeBanner: false,
+      home: Welcome(),
     );
   }
 }
-

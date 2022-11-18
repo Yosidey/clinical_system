@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:clinical_system/screens/doctores/doctores.dart';
-import 'package:clinical_system/services/request/doctores/consultas_doctores.dart';
+import 'package:clinical_system/services/request/doctores/request_doctores.dart';
 
 class DoctoresBloc extends Bloc<DoctoresEvent, DoctoresState> {
   @override

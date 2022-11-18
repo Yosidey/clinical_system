@@ -1,6 +1,7 @@
 import 'package:clinical_system/blocs/blocs.dart';
 import 'package:clinical_system/debugApp.dart';
 import 'package:clinical_system/libraries/components/loagindIndicator.dart';
+import 'package:clinical_system/models/usuario/usuario.dart';
 import 'package:clinical_system/screens/home/home.dart';
 import 'package:clinical_system/screens/tipo_cita/tipo_cita.dart';
 import 'package:clinical_system/screens/login/login.dart';
@@ -18,7 +19,7 @@ class LoginPage extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) {
-            return LoginBloc();
+            return UsersBloc();
           },
         )
       ],
@@ -58,35 +59,32 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginBloc, LoginState>(
+    return BlocListener<UsersBloc, UsersState>(
       listener: (context, state) {
-        if (state is LoginInitialState) {}
+        if (state is UsersInitialState) {}
         if (state is LoginLoadingState) {
           setState(() {
             isLoading = true;
           });
         }
-        if (state is LoginReceivedDataState) {
+
+        if (state is LoginSuccessState) {
+          setState(() {
+            isLoading = false;
+          });
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: const Text("Inicio de seccion exitoso"),
               action: SnackBarAction(label: "Entiendo", onPressed: () {}),
             ),
           );
-
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
         }
-        if (state is LoginSuccessState) {
+        if (state is UserFailureState) {
           setState(() {
             isLoading = false;
-          });
-
-          Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-        }
-        if (state is LoginFailureState) {
-          setState(() {
-            isLoading = false;
-            emailController.clear();
-            passwordController.clear();
+            /*emailController.clear();
+            passwordController.clear();*/
           });
 
           ScaffoldMessenger.of(context).showSnackBar(
@@ -97,7 +95,7 @@ class _LoginState extends State<Login> {
           );
         }
       },
-      child: BlocBuilder<LoginBloc, LoginState>(
+      child: BlocBuilder<UsersBloc, UsersState>(
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
@@ -105,70 +103,66 @@ class _LoginState extends State<Login> {
             ),
             body: Stack(
               children: [
-                Center(
-                  child: Row(
-                    children: [
-                      Expanded(child: Container()),
-                      Expanded(
-                        flex: 3,
-                        child: SingleChildScrollView(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Form(
-                              key: _formKey,
-                              child: Column(
-                                children: [
-                                  Text("Iniciar seccion", style: Theme.of(context).textTheme.headline3),
-                                  const SizedBox(height: 32),
-                                  TextFormField(
-                                    controller: emailController,
-                                    decoration: const InputDecoration(
-                                      labelText: "Email",
-                                      hintText: "Ingresa Email.",
-                                      border: OutlineInputBorder(),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 32),
-                                  TextFormField(
-                                    controller: passwordController,
-                                    decoration: const InputDecoration(
-                                      labelText: "Password",
-                                      hintText: "Ingresa Password.",
-                                      border: OutlineInputBorder(),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 32),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: ElevatedButton(
-                                      onPressed: isLoading
-                                          ? null
-                                          : () {
-                                              BlocProvider.of<LoginBloc>(context).add(LoginInEvent(
-                                                  email: emailController.text,
-                                                  password: passwordController.text));
-                                            },
-                                      child: const Text("Iniciar seccion"),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.push(context,
-                                            MaterialPageRoute(builder: (context) => const DebugApp()));
-                                      },
-                                      child: const Text("Debug"),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(64.0),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          Text("Iniciar seccion", style: Theme.of(context).textTheme.headline2),
+                          const SizedBox(height: 32),
+                          TextFormField(
+                            controller: emailController,
+                            decoration: const InputDecoration(
+                              labelText: "Email",
+                              hintText: "Ingresa Email.",
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter email';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 32),
+                          TextFormField(
+                            controller: passwordController,
+                            decoration: const InputDecoration(
+                              labelText: "Password",
+                              hintText: "Ingresa Password.",
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter password';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 32),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: isLoading
+                                  ? null
+                                  : () {
+                                      /// Validate
+                                      if (_formKey.currentState!.validate()) {
+                                        /// Call handler after validation
+                                        BlocProvider.of<UsersBloc>(context).add(LoginInEvent(
+                                            user: UsuarioLogin(
+                                                correo: emailController.text,
+                                                password: passwordController.text)));
+                                      }
+                                    },
+                              child: const Text("Iniciar seccion"),
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                      Expanded(child: Container()),
-                    ],
+                    ),
                   ),
                 ),
                 if (isLoading) LoadingIndicator(color: Theme.of(context).primaryColor)

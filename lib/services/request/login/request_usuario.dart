@@ -16,10 +16,9 @@ class RequestUser {
   RequestUser.internal();
 
   ///*************** authenticateUser ***************
-  Future<UsuarioData> authenticateUser({required String correo, required String password}) async {
-    var user = UsuarioLogin(correo: correo, password: password);
+  Future<UsuarioLoginData> loginUser({required UsuarioLogin user}) async {
     print("user:${jsonEncode(user)}");
-    String url = AppData.API+AppData.LOGIN;
+    String url = AppData.API + AppData.LOGIN;
     print(url);
 
     /// Open API Service
@@ -28,17 +27,14 @@ class RequestUser {
     var response = await apiServer.apiPostRequest(jsonEncode(user));
     print("Body authenticateUser response:$response");
 
-
-    var userData = UsuarioData.fromJson(response);
+    var userData = UsuarioLoginData.fromJson(response);
 
     return userData;
   }
 
   ///*************** registerUser ***************
-  Future<UsuarioData> registerUser({required String correo, required String password}) async {
-    var user = UsuarioLogin(correo: correo, password: password);
-    print("user:${jsonEncode(user)}");
-    String url = AppData.API+AppData.REGISTER;
+  Future<UsuarioRegisterData> registerUser({required UsuarioRegister user}) async {
+    String url = "http://desarrollo.steel.net.co/apiaurora/api/registro";
     print(url);
 
     /// Open API Service
@@ -47,8 +43,7 @@ class RequestUser {
     var response = await apiServer.apiPostRequest(jsonEncode(user));
     print("Body authenticateUser response:$response");
 
-
-    var userData = UsuarioData.fromJson(response);
+    var userData = UsuarioRegisterData.fromJson(response);
 
     return userData;
   }

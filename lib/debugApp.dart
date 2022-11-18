@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:clinical_system/services/request/cita/request_cita.dart';
+import 'package:clinical_system/services/request/cita/request_citas.dart';
 import 'package:clinical_system/services/request/consultas/request_consultas.dart';
-import 'package:clinical_system/services/request/doctores/consultas_doctores.dart';
+import 'package:clinical_system/services/request/doctores/request_doctores.dart';
 import 'package:clinical_system/services/request/especialidades/request_especialidades.dart';
 import 'package:clinical_system/services/request/fechas/request_fechas.dart';
 import 'package:clinical_system/services/request/horas/request_horas.dart';
 import 'package:clinical_system/services/request/login/request_usuario.dart';
 import 'package:clinical_system/models/cita/cita.dart';
+import 'package:clinical_system/models/usuario/usuario.dart';
 
 class DebugApp extends StatefulWidget {
   const DebugApp({Key? key}) : super(key: key);
@@ -27,7 +28,24 @@ class _DebugAppState extends State<DebugApp> {
           ElevatedButton(
             onPressed: () async {
               final requestUser = RequestUser();
-              var data = await requestUser.authenticateUser(correo: "asdf@gmail.com", password: "asdf");
+              var data = await requestUser.loginUser(user: UsuarioLogin(correo: "asdf@gmail.com", password: "asdf"));
+            },
+            child: const Text("authenticateUser"),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final requestUser = RequestUser();
+              var data = await requestUser.registerUser(user: UsuarioRegister(
+                  numeroIdentidad: "1234567890",
+                  primerNombre: "juliana",
+                  segundoNombre: "juliana",
+                  primerApellido: "ramirez",
+                  segundoApellido: "ramirez",
+                  correo: "1camilajavier1@gmail.com",
+                  celCliente: "23445464141",
+                  telefono: "4534544563",
+                  contrasena: "da5645645624"
+              ));
             },
             child: const Text("authenticateUser"),
           ),

@@ -7,5 +7,5 @@ export 'package:clinical_system/blocs/tipo_cita_bloc.dart';
 export 'package:clinical_system/blocs/tipo_consulta_bloc..dart';
 
 
-export 'package:clinical_system/blocs/sesiones_bloc.dart';
+export 'package:clinical_system/blocs/users_bloc.dart';
 

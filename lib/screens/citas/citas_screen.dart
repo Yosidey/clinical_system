@@ -6,6 +6,7 @@ import 'package:clinical_system/models/doctor/doctor.dart';
 import 'package:clinical_system/models/especialidad/especialidad.dart';
 import 'package:clinical_system/models/fecha/fecha.dart';
 import 'package:clinical_system/models/horario/horario.dart';
+import 'package:clinical_system/models/usuario/usuario.dart';
 import 'package:clinical_system/screens/citas/citas.dart';
 
 import 'package:flutter/material.dart';
@@ -153,10 +154,11 @@ class _CitasState extends State<Citas> {
                               width: double.infinity,
                               child: ElevatedButton(
                                 onPressed: () {
+                                  final Usuario user = Usuario();
                                   BlocProvider.of<CitasBloc>(context).add(
                                     CitasAgendarEvent(
                                     citaData: CitaData(
-                                      idepacien: "10",
+                                      idepacien: user.getUser().data.id.toString(),
                                       fechaAgenda: widget.fecha.fechas_Disp,
                                       horaAgenda: widget.horario.hora_inicio,
                                       tipsoli: widget.cita.cita,

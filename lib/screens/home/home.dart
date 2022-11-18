@@ -1,3 +1,4 @@
+import 'package:clinical_system/debugApp.dart';
 import 'package:clinical_system/screens/tipo_cita/tipo_cita.dart';
 import 'package:flutter/material.dart';
 
@@ -39,9 +40,13 @@ class _HomeState extends State<Home> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const TipoCitaPage()));
               },
             ),
-            const ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Mi Agenda '),
+             ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Debug'),
+              onTap: (){
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => const DebugApp()));
+              },
             ),
             const ListTile(
               leading: Icon(Icons.person),
